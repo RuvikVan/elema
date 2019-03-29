@@ -13,14 +13,13 @@
       </div>
     </div>
     <v-goods v-bind:seller="seller"></v-goods>
-    <v-shopcart></v-shopcart>
+<!--    <v-shopcart></v-shopcart>-->
   </div>
 </template>
 
 <script>
 import header from './components/header/header'
 import goods from './components/goods/goods'
-import shopcart from './components/shopcart/shopcart'
 import axios from 'axios'
 
 export default {
@@ -32,8 +31,7 @@ export default {
   },
   components: {
     'v-header': header,
-    'v-goods': goods,
-    'v-shopcart': shopcart
+    'v-goods': goods
   },
   created () {
     axios.get('http://118.25.61.61:8080/data/data.json').then((res) => {

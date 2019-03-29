@@ -1,15 +1,15 @@
 <template>
   <article>
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="item in goods" :key="item">
+        <li v-for="(item,index) in goods" class="menu-item" @click="selectMenu(index)" :key="item">
           <p v-show="item.type">{{item.name}}</p>
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="item in goods" class="food-list" :key="item">
+        <li v-for="item in goods" class="food-list food-list-hook" :key="item">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item border-1px" :key="food">
@@ -27,7 +27,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <!--<cartcontrol :food="food"></cartcontrol>-->
+                  <v-cartcontrol :food="food"></v-cartcontrol>
                 </div>
               </div>
             </li>
@@ -35,11 +35,16 @@
         </li>
       </ul>
     </div>
+    <v-shopcart :select-foods='selectFoods' :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></v-shopcart>
   </article>
 </template>
 
 <script>
 import axios from 'axios'
+import cartcontrol from '../cartcontrol/cartcontrol'
+import BScroll from 'better-scroll'
+import shopcart from '../shopcart/shopcart'
+
 export default {
   name: 'goods',
   props: {
@@ -57,7 +62,43 @@ export default {
   created () {
     axios.get('http://118.25.61.61:8080/data/data.json').then((res) => {
       this.goods = res.data.goods
+      this.$nextTick(() => {
+        this._initScroll()
+      })
     })
+  },
+  components: {
+    'v-cartcontrol': cartcontrol,
+    'v-shopcart': shopcart
+  },
+  methods: {
+    _initScroll () {
+      this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+        click: true
+      })
+      this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+        click: true,
+        probeType: 3
+      })
+    },
+    selectMenu (index) {
+      let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
+      let el = foodList[index]
+      this.foodsScroll.scrollToElement(el, 300)
+    }
+  },
+  computed: {
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
+    }
   }
 }
 </script>
@@ -71,6 +112,8 @@ export default {
 
   .menu-wrapper {
     height: 14rem;
+    width: 2rem;
+    overflow: hidden;
     background: #f3f5f7;
   }
 
@@ -91,6 +134,8 @@ export default {
 
   .foods-wrapper {
     width: 100%;
+    height: 14rem;
+    overflow: hidden;
   }
 
   .title {
@@ -108,6 +153,7 @@ export default {
 
   .content {
     flex: 1;
+    position: relative;
     margin-left: 0.4rem;
   }
 

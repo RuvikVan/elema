@@ -15,16 +15,92 @@
         <div class="pay" :class="payClass">{{ payDesc }}</div>
       </div>
     </div>
+    <div class="shopcart-list" v-show="totalCount">
+      <div class="list-header">
+        <h1 class="title">购物车</h1>
+        <span class="empty" @click="empty">清空</span>
+      </div>
+      <div class="list-content" ref="listContent">
+        <ul>
+          <li class="food" v-for="food in selectFoods" :key="food">
+            <span class="name">{{food.name}}</span>
+            <div class="price">
+              <span>￥{{food.price * food.count}}</span>
+            </div>
+            <div class="cartcontrol-wrapper">
+              <cartcontrol @add="addFood" :food="food"></cartcontrol>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </footer>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+
 export default {
   name: 'shopcart',
+  created () {
+    this.$nextTick(() => {
+      this._initScroll()
+    })
+  },
+  data () {
+    return {
+      fold: true,
+      balls: [
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        }
+      ],
+      dropBalls: []
+    }
+  },
+  methods: {
+    _initScroll () {
+      this.menuScroll = new BScroll(this.$refs.listContent, {
+        click: true
+      })
+    },
+    empty () {
+      this.selectFoods.forEach((food) => {
+        food.count = 0
+      })
+    },
+    addFood (target) {
+      this.drop(target)
+    },
+    drop (el) {
+      for (let i = 0; i < this.balls.length; i++) {
+        let ball = this.balls[i]
+        if (!ball.show) {
+          ball.show = true
+          ball.el = el
+          this.dropBalls.push(ball)
+          return
+        }
+      }
+    }
+  },
   props: {
     selectFoods: {
       type: Array,
-      default () {
+      default
+      () {
         return [
           {
             price: 123,
@@ -35,11 +111,13 @@ export default {
     },
     deliveryPrice: {
       type: Number,
-      default: 9
+      default:
+          9
     },
     minPrice: {
       type: Number,
-      default: 0
+      default:
+          0
     }
   },
   computed: {
@@ -73,6 +151,17 @@ export default {
       } else {
         return 'enough'
       }
+    }
+  },
+  watch: {
+    totalCount () {
+      if (!this.totalCount) {
+        this.fold = true
+        return false
+      }
+      let show = !this.fold
+      console.log(show)
+      return show
     }
   }
 }
@@ -151,7 +240,6 @@ export default {
     font-weight: 700;
     color: #ffffff;
     background: rgb(240, 20, 20);
-    /*box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.4);*/
   }
 
   .price {
@@ -195,5 +283,52 @@ export default {
   .content-right .enough {
     background: #00b43c;
     color: #fff;
+  }
+
+  .shopcart-list {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    transform: translate3d(0, -100%, 0);
+  }
+
+  .shopcart-list .list-header {
+    height: 1.5rem;
+    line-height: 1rem;
+    padding: 0 1rem;
+    background: #f3f5f7;
+    border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+  }
+
+  .shopcart-list .list-header .empty {
+    float: right;
+    color: rgb(7, 17, 27)
+  }
+
+  .shopcart-list .list-header .title {
+    float: left;
+    color: rgb(7, 17, 27)
+  }
+
+  .shopcart-list .list-content {
+    max-height: 6rem;
+    width: 100%;
+    overflow: hidden;
+    background: #fff
+  }
+
+  .shopcart-list .list-content .food {
+    position: relative;
+  }
+
+  .shopcart-list .list-content .food .name {
+  }
+
+  .shopcart-list .list-content .food .price {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.5rem;
   }
 </style>
