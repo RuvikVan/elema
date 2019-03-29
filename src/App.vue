@@ -12,8 +12,7 @@
         <router-link :to="{name:'seller'}">商家</router-link>
       </div>
     </div>
-    <v-goods v-bind:seller="seller"></v-goods>
-<!--    <v-shopcart></v-shopcart>-->
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
@@ -43,6 +42,7 @@ export default {
 
 <style>
   @import "./common/css/style.css";
+
   * {
     margin: 0;
     padding: 0;
