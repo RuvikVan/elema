@@ -3,7 +3,7 @@
     <div class="content">
       <div class="content-left">
         <div class="logo-wrapper">
-          <div class="logo" :class="{'highlight':totalCount>0}">
+          <div class="logo" :class="{'highlight':totalCount>0}" @click="show">
             <span class="icon-shopping_cart" :class="{'highlight':totalCount>0}"></span>
           </div>
           <div class="num" v-show="totalCount>0">{{ totalCount }}</div>
@@ -15,7 +15,7 @@
         <div class="pay" :class="payClass">{{ payDesc }}</div>
       </div>
     </div>
-    <div class="shopcart-list" v-show="totalCount">
+    <div class="shopcart-list" v-show="fold">
       <div class="list-header">
         <h1 class="title">购物车</h1>
         <span class="empty" @click="empty">清空</span>
@@ -49,7 +49,7 @@ export default {
   },
   data () {
     return {
-      fold: true,
+      fold: false,
       balls: [
         {
           show: false
@@ -94,6 +94,9 @@ export default {
           return
         }
       }
+    },
+    show () {
+      this.fold = !this.fold
     }
   },
   props: {
@@ -154,14 +157,8 @@ export default {
     }
   },
   watch: {
-    totalCount () {
-      if (!this.totalCount) {
-        this.fold = true
-        return false
-      }
-      let show = !this.fold
-      console.log(show)
-      return show
+    fold () {
+      return this.fold
     }
   }
 }
