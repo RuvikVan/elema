@@ -2,9 +2,9 @@
   <article>
     <div class="header">
       <div class="header-left">
-        <h1 class="score">{{seller.score}}</h1>
+        <h1 class="score">{{ seller.score }}</h1>
         <div class="title">综合评分</div>
-        <div class="rank">高于周边商家{{seller.rankRate}}%</div>
+        <div class="rank">高于周边商家{{ seller.rankRate }}%</div>
       </div>
       <div class="header-right">
         <div class="header-right-top">
@@ -13,7 +13,7 @@
         </div>
         <div class="header-right-bottom">
           <span class="title">送达时间</span>
-          <span class="delivery">{{seller.deliveryTime}}分钟</span>
+          <span class="delivery">{{ seller.deliveryTime }}分钟</span>
         </div>
       </div>
     </div>
@@ -26,13 +26,20 @@
       <div class="evaluate-content" ref="evaluateContent">
         <ul>
           <li class="rate" v-for="rate in copyRatings" :key="rate">
-<!--            <div content="evaluate-content-li">-->
-<!--              <div class="evaluate-content-li-left">-->
-<!--                <img width="28" height="28" :src="rate.avatar">-->
-<!--              </div>-->
-<!--              <div class="evaluate-content-li-right"></div>-->
-<!--            </div>-->
-            <span>{{rate.text}}</span>
+            <div class="evaluate-content-li">
+              <div class="evaluate-content-li-left">
+                <img width="28" height="28" :src="rate.avatar">
+              </div>
+              <div class="evaluate-content-li-right">
+                <div class="evaluate-content-li-right-top">
+                  <span>{{ rate.username }}</span>
+                  <span>{{ crtTimeFtt(rate.rateTime) }}</span>
+                </div>
+                <div>
+                  <span>{{ rate.text }}</span>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -67,6 +74,10 @@ export default {
         }
       })
       console.log(this.copyRatings)
+    },
+    crtTimeFtt (timeStamp) {
+      var date = new Date(timeStamp)
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
     }
   },
   props: {
@@ -189,7 +200,7 @@ export default {
 
   .evaluate-content {
     margin-top: 0.5rem;
-    max-height: 6rem;
+    max-height: 10rem;
     width: 100%;
     overflow: hidden;
   }
@@ -201,5 +212,33 @@ export default {
 
   .evaluate-content li span {
     font-size: 0.5rem;
+  }
+
+  .evaluate-content-li {
+    display: flex;
+    flex-direction: row;
+  }
+
+   .evaluate-content-li-right{
+     width: 100%;
+  }
+
+  .evaluate-content-li-right span:nth-child(1) {
+    font-size: 0.1rem;
+  }
+
+  .evaluate-content-li-right span:nth-child(2) {
+    font-size: 0.1rem;
+  }
+
+  .evaluate-content-li-right-top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .evaluate-content-li-right-top span:nth-child(2) {
+
   }
 </style>
