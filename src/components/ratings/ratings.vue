@@ -206,8 +206,7 @@ export default {
   }
 
   .evaluate-content li {
-    /*border-top: 0.1rem solid black;*/
-    /*border-bottom: 0.1rem solid black;*/
+
   }
 
   .evaluate-content li span {

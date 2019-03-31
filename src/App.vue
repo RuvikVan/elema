@@ -18,7 +18,6 @@
 
 <script>
 import header from './components/header/header'
-import goods from './components/goods/goods'
 import axios from 'axios'
 
 export default {
@@ -29,8 +28,7 @@ export default {
     }
   },
   components: {
-    'v-header': header,
-    'v-goods': goods
+    'v-header': header
   },
   created () {
     axios.get('http://118.25.61.61:8080/data/data.json').then((res) => {
