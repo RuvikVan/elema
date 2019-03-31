@@ -31,7 +31,7 @@
       </div>
       <ul v-if="seller.supports" class="supports">
         <li class="support-item" v-for="(item,index) in seller.supports" :key="item">
-          <!--          <span class="icon" :class="classMap[seller.supports[index].type]"></span>-->
+<!--          <span class="icon" :class="classMap[seller.supports[index].type]"></span>-->
           <span class="text">{{seller.supports[index].description}}</span>
         </li>
       </ul>
@@ -120,8 +120,23 @@ export default {
     margin-left: 1rem;
   }
 
+  .title {
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
+  }
+
+  .support-item {
+    padding: 0.4rem;
+  }
+
+  .content {
+    color: red;
+    margin: 0.5rem;
+  }
+
   .second-content {
     border-top: 1rem solid gray;
+    margin-top: 0.5rem;
   }
 
   .support-item {
@@ -140,4 +155,8 @@ export default {
     border-top: 1rem solid gray;
   }
 
+  .info-item{
+    border-top: 0.1rem solid lightgrey;
+    padding: 0.4rem;
+  }
 </style>
